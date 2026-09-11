@@ -88,7 +88,11 @@ html, body {
         display: none !important; /* Esconde CTA no header e joga pro hamburger */
     }
     .hero-menu-toggle {
-        display: flex !important;
+        display: grid !important;
+    }
+    
+    .hero-social-proof {
+        display: none !important;
     }
 
     /* HERO */
@@ -142,19 +146,54 @@ html, body {
     }
 
     /* FAQ */
+    .faq-experience-stage {
+        height: auto !important;
+    }
+    .faq-ilidiane {
+        position: relative !important;
+        inset: auto !important;
+        height: 380px !important; /* Altura suficiente para o rosto e ombros */
+        margin-bottom: -20px !important; /* Leve sobreposição com as perguntas */
+    }
     .faq-card-cloud {
-        grid-template-columns: 1fr !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        padding-inline: 4px !important;
+        position: relative !important;
+        z-index: 20 !important;
     }
     .faq-orbit-card {
+        position: relative !important;
         width: 100% !important;
         min-width: 0 !important;
+        min-height: 140px !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+    }
+    .faq-card-question {
+        padding: 12px 32px 12px 12px !important;
+        min-height: 120px !important;
     }
     .faq-card-toggle {
         flex-shrink: 0 !important; /* + e - não saem da tela */
+        width: 24px !important;
+        height: 24px !important;
+        right: 8px !important;
     }
     .faq-card-title {
         min-width: 0 !important;
         word-break: break-word !important;
+        font-size: 0.85rem !important;
+        line-height: 1.2 !important;
+    }
+    .faq-card-support {
+        font-size: 0.7rem !important;
+        line-height: 1.3 !important;
+        margin-top: 6px !important;
     }
 
     /* CTAs e BOTÕES GLOBAIS */
@@ -197,6 +236,89 @@ html, body {
         max-width: 100% !important;
         overflow: hidden !important;
     }
+
+    /* CORREÇÃO DE IMAGENS MOBILE (object-fit, object-position e estouradas) */
+    .hero-paper-image {
+        object-fit: contain !important;
+        object-position: center bottom !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        width: auto !important;
+        max-width: 100% !important;
+        transform: none !important;
+    }
+    
+    .about-campaign-billboard {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: hidden !important;
+    }
+
+    .about-campaign-billboard img {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        margin-inline: auto !important;
+        display: block !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(223, 139, 83, 0.2) !important;
+    }
+    
+    .faq-ilidiane img, .final-campaign-media img {
+        object-fit: cover !important;
+        object-position: center 20% !important;
+    }
+
+    /* CENTRALIZAÇÃO DE TEXTOS (Headlines, Eyebrows e Apoio) */
+    .section-eyebrow, .section-title, .section-intro,
+    .hero-title, .hero-support,
+    /* ALINHAMENTOS DE TEXTO CENTRALIZADO PARA MOBILE */
+    .services-container-v2 .section-eyebrow, .services-container-v2 h2,
+    .final-campaign-content h2, .final-campaign-content .section-eyebrow,
+    .process-campaign-content h2, .process-campaign-content .section-eyebrow,
+    .portfolio-section .portfolio-title, .portfolio-section .portfolio-eyebrow,
+    .portfolio-intro, .portfolio-intro p {
+        text-align: center !important;
+        margin-inline: auto !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* MELHORIA DO BOTÃO DO WHATSAPP NO FOOTER */
+    .footer-whatsapp-cta {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 16px !important;
+    }
+    .footer-whatsapp-cta span {
+        flex: 0 1 auto !important;
+    }
+
+    /* CONTAINERS E PADDING SEGURO */
+    .hero-layout, .services-container-v2, .portfolio-container, 
+    .process-campaign, .faq-editorial-header, .final-campaign-shell {
+        padding-inline: 18px !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* PREVENT OVERFLOW HORIZONTAL ABSOLUTO */
+    .process-campaign-grid, .faq-card-cloud {
+        overflow-x: hidden !important;
+        width: 100% !important;
+    }
+    
+    /* WHATSAPP FLOAT */
+    .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        bottom: 16px !important;
+        right: 16px !important;
+    }
 }
 
 /* MOBILE PEQUENO (340px) */
@@ -230,4 +352,22 @@ html, body {
 /* PREVENT ICON SHRINK */
 .hero-feature-icon, .services-benefit-icon, .about-campaign-feature-icon, .faq-card-meta {
     flex: 0 0 auto !important;
+}
+
+/* FIX INDIVIDUAL SERVICE IMAGES (Override old Sprite CSS) */
+.service-photo-v2 {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    object-fit: cover !important;
+    max-width: 100% !important;
+    transform: none !important;
+    filter: brightness(1.2) contrast(1.1) !important; /* Deixa a imagem mais viva */
+}
+
+/* Reduzir o escuridão do shade para as imagens aparecerem mais */
+.service-card-shade {
+    background: linear-gradient(180deg, transparent 0%, rgba(10,10,10,.2) 40%, #0a0a0a 95%) !important;
 }
