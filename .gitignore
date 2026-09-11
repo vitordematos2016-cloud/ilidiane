@@ -1,0 +1,16 @@
+backups/
+.local-server-error.log
+.local-server-out.log
+results-1920-chrome.png
+results-1920.png
+results-anchor.png
+results-tall.png
+top-check.png
+
+.local-server.err.log
+.local-server.out.log
+GEMINI.md
+findings.md
+progress.md
+task_plan.md
+SITE-CINEMATOGRAFICO/

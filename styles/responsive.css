@@ -1,0 +1,233 @@
+/* =========================================================
+   RESPONSIVIDADE, CENTRALIZAÇÃO E ENQUADRAMENTO (V.L.A.E.G)
+   ========================================================= */
+
+/* GLOBAL FIXES */
+html, body {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+
+
+/* CONTAINERS PADRÕES - Forçando centralização e margens */
+:root {
+    --container-desktop: min(100% - 48px, 1400px);
+    --container-tablet: min(100% - 40px, 1200px);
+    --container-mobile: calc(100% - 32px);
+    --container-tiny: calc(100% - 24px);
+}
+
+/* Fix Global Container Widths */
+.hero-layout,
+.services-container-v2,
+.portfolio-container,
+.process-campaign,
+.faq-editorial-header,
+.faq-experience-stage,
+.faq-final-contact,
+.final-campaign-shell,
+.site-footer__container {
+    width: var(--container-desktop) !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+}
+
+/* TABLET (1024px) */
+@media (max-width: 1024px) {
+    .hero-layout,
+    .services-container-v2,
+    .portfolio-container,
+    .process-campaign,
+    .faq-editorial-header,
+    .faq-experience-stage,
+    .faq-final-contact,
+    .final-campaign-shell,
+    .site-footer__container {
+        width: var(--container-tablet) !important;
+    }
+
+    /* SERVICES 2 Cols */
+    .services-cards-v2 {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    
+    /* FOOTER 2x2 */
+    .site-footer__grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 40px !important;
+    }
+    .footer-panel {
+        width: 100% !important;
+    }
+}
+
+/* MOBILE (768px e 600px combinados para single column simplificado) */
+@media (max-width: 768px) {
+    .hero-layout,
+    .services-container-v2,
+    .portfolio-container,
+    .process-campaign,
+    .faq-editorial-header,
+    .faq-experience-stage,
+    .faq-final-contact,
+    .final-campaign-shell,
+    .site-footer__container {
+        width: var(--container-mobile) !important;
+    }
+
+    /* HEADER */
+    .hero-nav {
+        padding-inline: 16px !important;
+    }
+    .hero-nav-whatsapp {
+        display: none !important; /* Esconde CTA no header e joga pro hamburger */
+    }
+    .hero-menu-toggle {
+        display: flex !important;
+    }
+
+    /* HERO */
+    .hero-layout {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 40px !important;
+    }
+    .hero-campaign {
+        max-width: 620px !important;
+        width: 100% !important;
+        margin-inline: auto !important;
+    }
+    .hero-title {
+        font-size: clamp(2.5rem, 8vw, 4rem) !important;
+    }
+
+    /* SERVICES */
+    .services-cards-v2 {
+        grid-template-columns: 1fr !important;
+        justify-items: center !important;
+    }
+    .service-card-v2 {
+        max-width: 560px !important;
+        width: 100% !important;
+    }
+    
+    /* COMO COMEÇAR (Processo) */
+    .process-campaign-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .process-campaign-card {
+        max-width: 560px !important;
+        width: 100% !important;
+        margin-inline: auto !important;
+    }
+
+    /* PORTFOLIO */
+    .portfolio-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .pills-container {
+        justify-content: flex-start !important;
+    }
+
+    /* SOBRE */
+    .about-campaign {
+        grid-template-columns: 1fr !important;
+        width: var(--container-mobile) !important;
+        margin-inline: auto !important;
+    }
+
+    /* FAQ */
+    .faq-card-cloud {
+        grid-template-columns: 1fr !important;
+    }
+    .faq-orbit-card {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    .faq-card-toggle {
+        flex-shrink: 0 !important; /* + e - não saem da tela */
+    }
+    .faq-card-title {
+        min-width: 0 !important;
+        word-break: break-word !important;
+    }
+
+    /* CTAs e BOTÕES GLOBAIS */
+    .hero-actions-v2, .final-campaign-action {
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 560px !important;
+        margin-inline: auto !important;
+    }
+    .hero-cta-primary, .hero-cta-secondary, .final-campaign-whatsapp {
+        width: 100% !important;
+        max-width: 100% !important;
+        justify-content: center !important;
+        min-height: 48px !important;
+    }
+    
+    /* FOOTER */
+    .site-footer__grid {
+        grid-template-columns: 1fr !important;
+        gap: 32px !important;
+    }
+    .site-footer__grid > * {
+        border-right: none !important; /* Remove divisórias verticais */
+        border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+        padding-bottom: 24px !important;
+    }
+    .site-footer__bottom {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 24px !important;
+    }
+    .footer-legal {
+        flex-direction: column !important;
+        gap: 16px !important;
+    }
+
+    /* SVGs Decorativos / Elementos que causam overflow */
+    .hero-orbits, .portfolio-glow, .faq-light-beam, .faq-bokeh, .faq-orbit-line {
+        max-width: 100% !important;
+        overflow: hidden !important;
+    }
+}
+
+/* MOBILE PEQUENO (340px) */
+@media (max-width: 340px) {
+    .hero-layout,
+    .services-container-v2,
+    .portfolio-container,
+    .process-campaign,
+    .faq-editorial-header,
+    .faq-experience-stage,
+    .faq-final-contact,
+    .final-campaign-shell,
+    .site-footer__container {
+        width: var(--container-tiny) !important;
+    }
+    
+    .hero-title {
+        font-size: clamp(2.1rem, 10vw, 2.5rem) !important;
+    }
+    
+    .faq-card-title {
+        font-size: 1rem !important;
+    }
+    
+    /* MAPA (se existir iframe de maps) */
+    iframe {
+        min-height: 300px !important;
+    }
+}
+
+/* PREVENT ICON SHRINK */
+.hero-feature-icon, .services-benefit-icon, .about-campaign-feature-icon, .faq-card-meta {
+    flex: 0 0 auto !important;
+}
