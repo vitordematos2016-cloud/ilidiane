@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigationState();
     initPortfolioReveal(prefersReducedMotion);
     initAboutCampaign(prefersReducedMotion);
+    initLocationSection(prefersReducedMotion);
     initProcessCampaign(prefersReducedMotion);
     initFinalCtaCampaign(prefersReducedMotion);
     initPortfolioParallax(prefersReducedMotion);
@@ -434,21 +435,74 @@ function initServiceCardTilt(prefersReducedMotion) {
 
 function initNavigationState() {
     const navLinks = Array.from(document.querySelectorAll('.hero-menu a[href^="#"]'));
-    const sections = navLinks
-        .map((link) => document.querySelector(link.getAttribute('href')))
-        .filter(Boolean);
-    if (!navLinks.length || !sections.length || !('IntersectionObserver' in window)) return;
+    const targets = navLinks
+        .map((link) => ({ link, section: document.querySelector(link.getAttribute('href')) }))
+        .filter(({ section }) => section);
+    if (!targets.length) return;
 
+    let animationFrame = 0;
+    const setActiveLink = (activeLink) => {
+        navLinks.forEach((link) => {
+            const isActive = link === activeLink;
+            link.classList.toggle('active', isActive);
+            if (isActive) link.setAttribute('aria-current', 'page');
+            else link.removeAttribute('aria-current');
+        });
+    };
+
+    const updateActiveSection = () => {
+        animationFrame = 0;
+        const navHeight = document.querySelector('.hero-nav')?.offsetHeight || 72;
+        const readingLine = window.scrollY + Math.max(navHeight + 34, window.innerHeight * 0.34);
+        let current = targets[0];
+
+        targets.forEach((target) => {
+            if (target.section.offsetTop <= readingLine) current = target;
+        });
+
+        if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) {
+            current = targets[targets.length - 1];
+        }
+        setActiveLink(current.link);
+    };
+
+    const requestUpdate = () => {
+        if (animationFrame) return;
+        animationFrame = requestAnimationFrame(updateActiveSection);
+    };
+
+    targets.forEach(({ link }) => link.addEventListener('click', () => setActiveLink(link)));
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate, { passive: true });
+    window.addEventListener('hashchange', requestUpdate);
+    window.addEventListener('load', requestUpdate, { once: true });
+    requestUpdate();
+}
+
+function initLocationSection(prefersReducedMotion) {
+    const section = document.querySelector('[data-location-section]');
+    const mapShell = section?.querySelector('[data-location-map]');
+    const map = mapShell?.querySelector('iframe');
+    if (!section) return;
+
+    map?.addEventListener('load', () => {
+        window.setTimeout(() => mapShell.classList.add('is-map-ready'), 850);
+    }, { once: true });
+
+    if (prefersReducedMotion.matches || !('IntersectionObserver' in window)) {
+        section.classList.add('is-visible');
+        return;
+    }
+
+    document.documentElement.classList.add('location-observe-ready');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
-            navLinks.forEach((link) => {
-                link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
-            });
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
         });
-    }, { rootMargin: '-28% 0px -62% 0px', threshold: 0 });
-
-    sections.forEach((section) => observer.observe(section));
+    }, { threshold: 0.08 });
+    observer.observe(section);
 }
 
 function initHeroParallax(prefersReducedMotion) {

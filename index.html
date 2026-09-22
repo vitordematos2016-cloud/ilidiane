@@ -30,7 +30,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Great+Vibes&display=swap" rel="stylesheet">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles/index.css?v=10">
+    <link rel="stylesheet" href="styles/index.css?v=11">
     <link rel="stylesheet" href="styles/responsive.css?v=12">
     
     <!-- Phosphor Icons: versão fixa e somente os pesos utilizados -->
@@ -53,6 +53,7 @@
             <a href="#servicos">Serviços</a>
             <a href="#resultados">Resultados</a>
             <a href="#sobre">Sobre</a>
+            <a href="#localizacao">Localização</a>
             <a href="#faq">FAQ</a>
         </div>
 
@@ -379,7 +380,7 @@
                 </div>
             </div>
 
-            <a class="about-campaign-scroll" href="#processo" aria-label="Continuar para a seção sobre o processo">
+            <a class="about-campaign-scroll" href="#localizacao" aria-label="Continuar para a seção de localização">
                 <svg class="about-scroll-desktop" viewBox="0 0 28 42" aria-hidden="true"><rect x="4" y="2" width="20" height="34" rx="10"></rect><circle cx="14" cy="11" r="2"></circle></svg>
                 <span class="about-scroll-desktop">CONTINUE EXPLORANDO</span>
                 <span class="mobile-scroll-gesture about-scroll-mobile" aria-hidden="true"><i></i></span>
@@ -390,6 +391,95 @@
 
         <div class="about-campaign-decor about-campaign-decor-left" aria-hidden="true"></div>
         <div class="about-campaign-decor about-campaign-decor-right" aria-hidden="true"></div>
+    </section>
+
+    <section class="location-section" id="localizacao" aria-labelledby="location-title" data-location-section>
+        <div class="location-atmosphere" aria-hidden="true">
+            <span class="location-glow location-glow-left"></span>
+            <span class="location-glow location-glow-right"></span>
+            <span class="location-leaf location-leaf-left"></span>
+            <span class="location-leaf location-leaf-right"></span>
+            <span class="location-floor-light"></span>
+        </div>
+
+        <div class="location-shell">
+            <header class="location-header">
+                <div class="location-heading">
+                    <p class="location-eyebrow">ONDE ENCONTRAR</p>
+                    <h2 class="location-title" id="location-title">
+                        <span>Seu momento</span>
+                        <em>começa aqui.</em>
+                    </h2>
+                    <p class="location-lead">Um espaço pensado para receber você com conforto,<br>cuidado e atenção em cada detalhe.</p>
+                </div>
+
+                <div class="location-script" aria-hidden="true">
+                    <span>Seu caminho<br>até aqui.</span>
+                    <i></i>
+                </div>
+            </header>
+
+            <div class="location-layout">
+                <div class="location-details">
+                    <article class="location-address-card">
+                        <span class="location-address-icon" aria-hidden="true"><i class="ph ph-map-pin"></i></span>
+                        <div class="location-address-copy">
+                            <h3>Ilidiane MasterNails</h3>
+                            <address>
+                                <span>Rua José Sampaio, 32 – 2º andar</span>
+                                <span>Loteamento Bertuol</span>
+                                <span>Guaraniaçu – PR</span>
+                                <span>CEP 85400-000</span>
+                            </address>
+                        </div>
+
+                        <div class="location-actions">
+                            <a class="location-button location-button-primary" href="https://www.google.com/maps/place/R.+Jos%C3%A9+Sampaio,+32+-+2%C2%BA+andar+-+Lot.+Bertuol,+Guarania%C3%A7u+-+PR,+85400-000/@-25.0994637,-52.8703243,18.67z/data=!4m5!3m4!1s0x94f1e5fe20a7d87b:0xc7d1e053b584d4fc!8m2!3d-25.0996104!4d-52.8704132?hl=pt-BR&amp;entry=ttu&amp;g_ep=EgoyMDI2MDkxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">
+                                <i class="ph-fill ph-map-trifold" aria-hidden="true"></i>
+                                <span>Abrir no Google Maps</span>
+                                <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
+                            </a>
+                            <a class="location-button location-button-secondary" href="https://www.google.com/maps/dir/?api=1&amp;destination=-25.0996104%2C-52.8704132&amp;destination_place_id=0x94f1e5fe20a7d87b%3A0xc7d1e053b584d4fc" target="_blank" rel="noopener noreferrer">
+                                <i class="ph-fill ph-navigation-arrow" aria-hidden="true"></i>
+                                <span>Traçar rota</span>
+                                <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </article>
+
+                    <div class="location-benefits" role="list" aria-label="Facilidades da localização">
+                        <div class="location-benefit" role="listitem">
+                            <i class="ph ph-shield-check" aria-hidden="true"></i>
+                            <strong>FÁCIL ACESSO</strong>
+                        </div>
+                        <div class="location-benefit" role="listitem">
+                            <i class="ph ph-car" aria-hidden="true"></i>
+                            <strong>ESTACIONAMENTO<br>PRÓXIMO</strong>
+                        </div>
+                        <div class="location-benefit" role="listitem">
+                            <i class="ph ph-heart" aria-hidden="true"></i>
+                            <strong>VOCÊ SEMPRE<br>BEM-VINDA</strong>
+                        </div>
+                    </div>
+
+                    <blockquote class="location-quote">“Mais do que um endereço,<br>é o lugar onde você se cuida.”</blockquote>
+                </div>
+
+                <div class="location-map-shell" data-location-map>
+                    <div class="location-map-loading" aria-hidden="true">
+                        <i class="ph ph-map-pin"></i>
+                        <span>ILIDIANE MASTERNAILS</span>
+                        <small>Guaraniaçu • PR</small>
+                    </div>
+                    <iframe class="location-map" title="Mapa da Ilidiane MasterNails na Rua José Sampaio, 32, Guaraniaçu" src="https://www.google.com/maps?q=-25.0996104,-52.8704132&amp;z=18&amp;output=embed" width="800" height="520" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="location-decor-scene" aria-hidden="true">
+                <span class="location-decor-pin"><i class="ph-fill ph-map-pin"></i></span>
+                <span class="location-decor-plaque">BELEZA<br>TRANSFORMA<br>ROTINAS<i class="ph ph-heart"></i></span>
+            </div>
+        </div>
     </section>
 
     <section class="process-section" id="processo" aria-labelledby="process-title">
@@ -684,6 +774,7 @@
                                 <li><a href="#servicos">Serviços</a></li>
                                 <li><a href="#resultados">Resultados</a></li>
                                 <li><a href="#sobre">Sobre</a></li>
+                                <li><a href="#localizacao">Localização</a></li>
                                 <li><a href="#faq">FAQ</a></li>
                                 <li><a href="#agendar">Agendar horário</a></li>
                             </ul>
@@ -770,6 +861,6 @@
         <button type="button" class="modal-nav next" aria-label="Ver próximo trabalho"><span aria-hidden="true">›</span></button>
     </div>
 
-    <script src="scripts/main.js?v=7"></script>
+    <script src="scripts/main.js?v=8"></script>
 </body>
 </html>
