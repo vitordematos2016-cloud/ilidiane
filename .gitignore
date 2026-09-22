@@ -14,3 +14,28 @@ findings.md
 progress.md
 task_plan.md
 SITE-CINEMATOGRAFICO/
+
+# Arquivos locais e temporários
+.tmp/
+*.log
+*.tmp
+*.temp
+*.cache
+.cache/
+*.dmp
+remove_bg.py
+/SITE-CINEMATOGRAFICO
+
+# Artefatos de navegador e testes locais
+playwright-report/
+test-results/
+**/Crashpad/
+**/GPUCache/
+**/Code Cache/
+
+# Arquivos do sistema e editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/

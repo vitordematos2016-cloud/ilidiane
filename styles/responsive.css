@@ -1,5 +1,35 @@
 /* =========================================================
-   RESPONSIVIDADE, CENTRALIZAÇÃO E ENQUADRAMENTO (V.L.A.E.G)
+   ESTILOS GLOBAIS DE CORREÇÃO
+   ========================================================= */
+
+/* Monograma compacto do cabeçalho */
+.hero-monogram {
+    width: 58px !important;
+    height: 58px !important;
+    min-width: 58px;
+    padding: 0;
+    display: grid !important;
+    place-items: center !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    font-size: 1.45rem !important;
+}
+
+/* Monograma compacto do rodapé */
+.footer-brand__monogram {
+    width: 58px !important;
+    height: 58px !important;
+    min-width: 58px;
+    padding: 0;
+    display: grid !important;
+    place-items: center !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    font-size: 1.45rem !important;
+}
+
+/* =========================================================
+   MEDIA QUERIES RESPONSIVAS
    ========================================================= */
 
 /* GLOBAL FIXES */
@@ -55,7 +85,7 @@ html, body {
     .services-cards-v2 {
         grid-template-columns: 1fr 1fr !important;
     }
-    
+
     /* FOOTER 2x2 */
     .site-footer__grid {
         grid-template-columns: 1fr 1fr !important;
@@ -84,6 +114,12 @@ html, body {
     .hero-nav {
         padding-inline: 16px !important;
     }
+    .hero-monogram {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px;
+        font-size: 1.25rem !important;
+    }
     .hero-nav-whatsapp {
         display: none !important; /* Esconde CTA no header e joga pro hamburger */
     }
@@ -110,6 +146,20 @@ html, body {
         font-size: clamp(2.5rem, 8vw, 4rem) !important;
     }
 
+    /* ALINHAMENTO DOS DIFERENCIAIS (HERO FEATURES) */
+    .hero-features {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        width: max-content !important;
+        max-width: 100% !important;
+        margin-inline: auto !important;
+        gap: 16px !important;
+    }
+    .hero-feature {
+        width: 100% !important;
+    }
+
     /* SERVICES */
     .services-cards-v2 {
         grid-template-columns: 1fr !important;
@@ -132,10 +182,8 @@ html, body {
 
     /* PORTFOLIO */
     .portfolio-grid {
-        grid-template-columns: 1fr !important;
-    }
-    .pills-container {
-        justify-content: flex-start !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 7px !important;
     }
 
     /* SOBRE */

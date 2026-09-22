@@ -19,12 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initServiceCardTilt(prefersReducedMotion);
     initNavigationState();
     initPortfolioReveal(prefersReducedMotion);
-    initInstagramShowcaseReveal(prefersReducedMotion);
     initAboutCampaign(prefersReducedMotion);
     initProcessCampaign(prefersReducedMotion);
     initFinalCtaCampaign(prefersReducedMotion);
-    initPortfolioFilters();
-    initPortfolioTilt(prefersReducedMotion);
     initPortfolioParallax(prefersReducedMotion);
     initLightbox();
     initFaq(prefersReducedMotion);
@@ -496,49 +493,6 @@ function initHeroParallax(prefersReducedMotion) {
     });
 }
 
-function initPortfolioFilters() {
-    const filterPills = Array.from(document.querySelectorAll('.filter-pill'));
-    const portfolioCards = Array.from(document.querySelectorAll('.portfolio-card'));
-    if (!filterPills.length || !portfolioCards.length) return;
-
-    const hideTimers = new WeakMap();
-
-    filterPills.forEach((pill) => {
-        pill.addEventListener('click', () => {
-            filterPills.forEach((item) => {
-                const isCurrent = item === pill;
-                item.classList.toggle('active', isCurrent);
-                item.setAttribute('aria-pressed', String(isCurrent));
-            });
-            pill.classList.add('active');
-            const filterValue = pill.dataset.filter;
-
-            portfolioCards.forEach((card) => {
-                const pendingTimer = hideTimers.get(card);
-                if (pendingTimer) window.clearTimeout(pendingTimer);
-
-                const categories = (card.dataset.category || '').split(/\s+/);
-                const shouldShow = filterValue === 'todos' || categories.includes(filterValue);
-                card.classList.remove('is-filtering-in', 'is-filtering-out');
-
-                if (shouldShow) {
-                    card.hidden = false;
-                    requestAnimationFrame(() => card.classList.add('is-filtering-in'));
-                    window.setTimeout(() => card.classList.remove('is-filtering-in'), 430);
-                    return;
-                }
-
-                card.classList.add('is-filtering-out');
-                const timer = window.setTimeout(() => {
-                    card.hidden = true;
-                    card.classList.remove('is-filtering-out');
-                }, 220);
-                hideTimers.set(card, timer);
-            });
-        });
-    });
-}
-
 function initPortfolioReveal(prefersReducedMotion) {
     const section = document.querySelector('.portfolio-section');
     if (!section) return;
@@ -579,24 +533,6 @@ function initInstagramShowcaseReveal(prefersReducedMotion) {
     observer.observe(showcase);
 }
 
-function initPortfolioTilt(prefersReducedMotion) {
-    if (prefersReducedMotion.matches || !window.matchMedia('(pointer: fine)').matches) return;
-
-    document.querySelectorAll('.portfolio-card').forEach((card) => {
-        card.addEventListener('pointermove', (event) => {
-            const bounds = card.getBoundingClientRect();
-            const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-            const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-            card.style.setProperty('--tilt-x', `${y * -3}deg`);
-            card.style.setProperty('--tilt-y', `${x * 3}deg`);
-        });
-        card.addEventListener('pointerleave', () => {
-            card.style.setProperty('--tilt-x', '0deg');
-            card.style.setProperty('--tilt-y', '0deg');
-        });
-    });
-}
-
 function initPortfolioParallax(prefersReducedMotion) {
     const section = document.querySelector('.portfolio-section');
     if (!section || prefersReducedMotion.matches || !window.matchMedia('(pointer: fine)').matches) return;
@@ -615,30 +551,53 @@ function initPortfolioParallax(prefersReducedMotion) {
 }
 
 function initLightbox() {
+    const sourceGroups = Array.from(document.querySelectorAll('.portfolio-marquee-group:not([data-marquee-clone])'));
+    const sourceCards = sourceGroups.flatMap((group) => Array.from(group.querySelectorAll('.portfolio-card')));
+
+    sourceCards.forEach((card, index) => { card.dataset.portfolioIndex = String(index); });
+    sourceGroups.forEach((group) => {
+        const track = group.parentElement;
+        if (!track || track.querySelector('[data-marquee-clone]')) return;
+        const clone = group.cloneNode(true);
+        clone.dataset.marqueeClone = '';
+        clone.setAttribute('aria-hidden', 'true');
+        clone.querySelectorAll('.portfolio-card').forEach((card) => { card.tabIndex = -1; });
+        track.appendChild(clone);
+    });
+
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
-    const caption = document.getElementById('modalCaption');
     const closeButton = document.querySelector('.modal-close');
     const previousButton = document.querySelector('.modal-nav.prev');
     const nextButton = document.querySelector('.modal-nav.next');
     const modalMedia = modal?.querySelector('.modal-content');
     const portfolioCards = Array.from(document.querySelectorAll('.portfolio-card'));
-    if (!modal || !modalImg || !caption || !closeButton || !portfolioCards.length) return;
+    const showcase = document.querySelector('.portfolio-showcase');
+    const featured = document.querySelector('.portfolio-featured');
+    const featuredImg = featured?.querySelector('.portfolio-featured-img');
+    const featuredClose = featured?.querySelector('.portfolio-featured-close');
+    const featuredPrevious = featured?.querySelector('.portfolio-featured-nav.prev');
+    const featuredNext = featured?.querySelector('.portfolio-featured-nav.next');
+    const desktopPreview = window.matchMedia('(min-width: 1181px)');
+    if (!modal || !modalImg || !closeButton || !previousButton || !nextButton || !sourceCards.length) return;
 
-    let images = [];
+    const images = sourceCards.map((card) => {
+        const image = card.querySelector('.portfolio-img');
+        return {
+            src: image?.currentSrc || image?.src || '',
+            alt: image?.alt || 'Trabalho real de nail design'
+        };
+    });
     let currentIndex = 0;
+    let featuredIndex = 0;
     let lastFocus = null;
     let swipeStartX = null;
 
-    const visibleCards = () => portfolioCards.filter((card) => !card.hidden && !card.classList.contains('is-filtering-out'));
     const showImage = (index) => {
-        if (!images.length) return;
         currentIndex = (index + images.length) % images.length;
         const image = images[currentIndex];
-        modalImg.style.setProperty('--modal-sprite-left', image.cropLeft);
-        modalImg.style.setProperty('--modal-sprite-top', image.cropTop);
+        modalImg.src = image.src;
         modalImg.alt = image.alt;
-        caption.textContent = image.title;
     };
     const closeModal = () => {
         modal.classList.remove('is-open');
@@ -647,15 +606,8 @@ function initLightbox() {
         lastFocus?.focus();
     };
 
-    const openModal = (card) => {
-        const cards = visibleCards();
-        images = cards.map((item) => ({
-            alt: item.querySelector('.portfolio-img')?.alt || 'Trabalho real de nail design',
-            title: item.querySelector('h3')?.textContent.trim() || 'Trabalho real',
-            cropLeft: item.dataset.cropLeft || '-80.77%',
-            cropTop: `${(parseFloat(item.dataset.cropTop || '-210') - 6).toFixed(2)}%`
-        }));
-        currentIndex = Math.max(0, cards.indexOf(card));
+    const openModalAt = (index) => {
+        currentIndex = (index + images.length) % images.length;
         lastFocus = document.activeElement;
         showImage(currentIndex);
         modal.classList.add('is-open');
@@ -664,15 +616,48 @@ function initLightbox() {
         closeButton.focus();
     };
 
+    const showFeatured = (index) => {
+        if (!featured || !featuredImg) return;
+        featuredIndex = (index + images.length) % images.length;
+        const image = images[featuredIndex];
+        featured.hidden = false;
+        showcase?.classList.remove('is-preview-closed');
+        portfolioCards.forEach((card) => card.classList.toggle('is-selected', Number(card.dataset.portfolioIndex) === featuredIndex));
+        featured.classList.add('is-changing');
+        featuredImg.src = image.src;
+        featuredImg.alt = image.alt;
+        requestAnimationFrame(() => requestAnimationFrame(() => featured.classList.remove('is-changing')));
+    };
+
     portfolioCards.forEach((card) => {
-        card.addEventListener('click', () => openModal(card));
-        card.querySelector('.btn-ver-mais')?.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                openModal(card);
+        card.addEventListener('click', () => {
+            const index = Number(card.dataset.portfolioIndex);
+            if (!Number.isInteger(index)) return;
+            if (desktopPreview.matches && featured) {
+                showFeatured(index);
+                return;
             }
+            openModalAt(index);
         });
     });
+
+    if (desktopPreview.matches) showFeatured(0);
+    desktopPreview.addEventListener?.('change', (event) => {
+        if (event.matches) {
+            showFeatured(featuredIndex);
+            return;
+        }
+        portfolioCards.forEach((card) => card.classList.remove('is-selected'));
+    });
+    featuredPrevious?.addEventListener('click', () => showFeatured(featuredIndex - 1));
+    featuredNext?.addEventListener('click', () => showFeatured(featuredIndex + 1));
+    featuredClose?.addEventListener('click', () => {
+        if (!featured) return;
+        featured.hidden = true;
+        showcase?.classList.add('is-preview-closed');
+        portfolioCards.forEach((card) => card.classList.remove('is-selected'));
+    });
+    featuredImg?.addEventListener('click', () => openModalAt(featuredIndex));
 
     closeButton?.addEventListener('click', closeModal);
     previousButton?.addEventListener('click', () => showImage(currentIndex - 1));
@@ -680,7 +665,10 @@ function initLightbox() {
     modal.addEventListener('click', (event) => {
         if (event.target === modal) closeModal();
     });
-    modalMedia?.addEventListener('pointerdown', (event) => { swipeStartX = event.clientX; });
+    modalMedia?.addEventListener('pointerdown', (event) => {
+        swipeStartX = event.clientX;
+        modalMedia.setPointerCapture?.(event.pointerId);
+    });
     modalMedia?.addEventListener('pointerup', (event) => {
         if (swipeStartX === null) return;
         const distance = event.clientX - swipeStartX;
@@ -688,6 +676,7 @@ function initLightbox() {
         if (Math.abs(distance) < 45) return;
         showImage(currentIndex + (distance < 0 ? 1 : -1));
     });
+    modalMedia?.addEventListener('pointercancel', () => { swipeStartX = null; });
     document.addEventListener('keydown', (event) => {
         if (!modal.classList.contains('is-open')) return;
         if (event.key === 'Escape') closeModal();
@@ -711,48 +700,45 @@ function initLightbox() {
 
 function initFaq(prefersReducedMotion) {
     const section = document.querySelector('[data-faq-experience]');
-    const stage = section?.querySelector('[data-faq-stage]');
-    const person = section?.querySelector('[data-faq-person]');
-    const cardCloud = section?.querySelector('.faq-card-cloud');
+    const cardList = section?.querySelector('[data-faq-list]');
     const cards = Array.from(section?.querySelectorAll('[data-faq-card]') || []);
-    if (!section || !stage || !cardCloud || !cards.length) return;
+    if (!section || !cardList || !cards.length) return;
 
     let currentCard = null;
 
     const closeCard = (card, restoreFocus = false) => {
         if (!card) return;
-        const button = card.querySelector('.faq-card-question');
-        const answer = card.querySelector('.faq-card-answer');
+        const button = card.querySelector('.faq-premium-question');
+        const answer = card.querySelector('.faq-premium-answer');
         card.classList.remove('is-open');
         button?.setAttribute('aria-expanded', 'false');
         answer?.setAttribute('aria-hidden', 'true');
         if (currentCard === card) currentCard = null;
-        cardCloud.classList.toggle('has-open-card', Boolean(currentCard));
+        cardList.classList.toggle('has-open-card', Boolean(currentCard));
         if (restoreFocus) button?.focus({ preventScroll: true });
     };
 
     const openCard = (card) => {
         if (currentCard && currentCard !== card) closeCard(currentCard);
-        const button = card.querySelector('.faq-card-question');
-        const answer = card.querySelector('.faq-card-answer');
+        const button = card.querySelector('.faq-premium-question');
+        const answer = card.querySelector('.faq-premium-answer');
         currentCard = card;
         card.classList.add('is-open');
         button?.setAttribute('aria-expanded', 'true');
         answer?.setAttribute('aria-hidden', 'false');
-        cardCloud.classList.add('has-open-card');
+        cardList.classList.add('has-open-card');
 
         if (window.matchMedia('(max-width: 700px)').matches) {
             requestAnimationFrame(() => card.scrollIntoView({
                 behavior: prefersReducedMotion?.matches ? 'auto' : 'smooth',
-                block: 'nearest',
-                inline: 'center'
+                block: 'nearest'
             }));
         }
     };
 
     cards.forEach((card) => {
-        const button = card.querySelector('.faq-card-question');
-        const answer = card.querySelector('.faq-card-answer');
+        const button = card.querySelector('.faq-premium-question');
+        const answer = card.querySelector('.faq-premium-answer');
         if (!button || !answer) return;
 
         button.addEventListener('click', () => {
@@ -773,7 +759,6 @@ function initFaq(prefersReducedMotion) {
 
     const showSection = () => {
         section.classList.add('is-visible');
-        window.setTimeout(() => section.classList.add('is-settled'), prefersReducedMotion?.matches ? 0 : 1150);
     };
 
     if (prefersReducedMotion?.matches || !('IntersectionObserver' in window)) {
@@ -788,38 +773,6 @@ function initFaq(prefersReducedMotion) {
         observer.observe(section);
     }
 
-    const precisePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-    if (prefersReducedMotion?.matches || !precisePointer.matches) return;
-
-    let pointerFrame = 0;
-    const updateParallax = (event) => {
-        if (window.innerWidth <= 1100) return;
-        window.cancelAnimationFrame(pointerFrame);
-        pointerFrame = window.requestAnimationFrame(() => {
-            const bounds = stage.getBoundingClientRect();
-            const x = ((event.clientX - bounds.left) / bounds.width - .5) * 2;
-            const y = ((event.clientY - bounds.top) / bounds.height - .5) * 2;
-            cards.forEach((card, index) => {
-                const strength = 2.4 + (index % 3) * 1.25;
-                card.style.setProperty('--faq-parallax-x', `${x * strength}px`);
-                card.style.setProperty('--faq-parallax-y', `${y * strength * .72}px`);
-            });
-            person?.style.setProperty('--faq-person-x', `${x * -2.8}px`);
-            person?.style.setProperty('--faq-person-y', `${y * -1.8}px`);
-        });
-    };
-
-    const resetParallax = () => {
-        cards.forEach((card) => {
-            card.style.setProperty('--faq-parallax-x', '0px');
-            card.style.setProperty('--faq-parallax-y', '0px');
-        });
-        person?.style.setProperty('--faq-person-x', '0px');
-        person?.style.setProperty('--faq-person-y', '0px');
-    };
-
-    stage.addEventListener('pointermove', updateParallax, { passive: true });
-    stage.addEventListener('pointerleave', resetParallax);
 }
 
 function initFinalCtaCampaign(prefersReducedMotion) {
