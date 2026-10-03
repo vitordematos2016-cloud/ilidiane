@@ -130,7 +130,7 @@ function initProcessCampaign(prefersReducedMotion) {
         const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
         const finishAnimations = (animations) => Promise.all(animations.map((animation) => animation.finished));
 
-        const scheduleNextSequence = (delay = 4000) => {
+        const scheduleNextSequence = (delay = 10000) => {
             window.clearTimeout(loopTimer);
             loopTimer = 0;
             if (!gridInView || sequenceRunning || document.visibilityState !== 'visible') return;
@@ -307,19 +307,12 @@ function initProcessCampaign(prefersReducedMotion) {
             } finally {
                 setFinalState();
                 sequenceRunning = false;
-                scheduleNextSequence();
             }
         };
 
         if ('IntersectionObserver' in window) {
             const visibilityObserver = new IntersectionObserver((entries) => {
                 gridInView = entries.some((entry) => entry.isIntersecting);
-                if (!gridInView) {
-                    window.clearTimeout(loopTimer);
-                    loopTimer = 0;
-                    return;
-                }
-                if (campaign.dataset.cardSequencePlayed === 'true' && !sequenceRunning) scheduleNextSequence(450);
             }, { threshold: .05 });
             visibilityObserver.observe(grid);
 
